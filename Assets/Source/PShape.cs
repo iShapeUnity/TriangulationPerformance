@@ -58,7 +58,7 @@ namespace Source
             }
 
             k += d;
-            this.UpdateMesh(64, 8f);
+            this.UpdateMesh(1024, 8f);
         }
 
         private void LateUpdate()
