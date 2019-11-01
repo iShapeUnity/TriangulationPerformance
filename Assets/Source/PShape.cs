@@ -14,33 +14,35 @@ namespace Source
 
         public TriangulationJobHandler triangulationJobHandler;
 
-        private int state = 1;
+        private int state = 0;
         
         public void ButtonClick()
         {
-            if (state == 0)
+            switch (state)
             {
-                state = 1;
-                sceneText.text = "Delaunay";
-            }
-            else if (state == 1)
-            {
-                state = 2;
-                sceneText.text = "Earcut";
-            }
-            else
-            {
-                state = 0;
-                sceneText.text = "Monotone";
+                case 0:
+                    state = 1;
+                    sceneText.text = "Delaunay";
+                    break;
+                case 1:
+                    state = 2;
+                    sceneText.text = "Earcut";
+                    break;
+                default:
+                    state = 0;
+                    sceneText.text = "Monotone";
+                    break;
             }
         }
 
         private void Awake()
         {
+            Application.targetFrameRate = 60;
             this.meshFilter = gameObject.GetComponent<MeshFilter>();
             this.mesh = new Mesh();
             this.mesh.MarkDynamic();
             this.meshFilter.mesh = mesh;
+            this.ButtonClick();
         }
 
         private float k = 0.2f;
@@ -48,7 +50,7 @@ namespace Source
 
         private void Update()
         {
-            if (k < 0.1f)
+            if (k < -0.5f)
             {
                 d = 0.005f;
             }
@@ -58,7 +60,8 @@ namespace Source
             }
 
             k += d;
-            this.UpdateMesh(1024, 8f);
+            this.UpdateMesh(4096, 4f);
+//            this.UpdateMesh(64, 8f);
         }
 
         private void LateUpdate()
