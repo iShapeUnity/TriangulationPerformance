@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
+    <e p="$USER_HOME$/Library/Caches/Rider2019.2/extResources" t="IncludeRecursive" />
+    <e p="$USER_HOME$/Library/Caches/Rider2019.2/resharper-host/local/Transient/ReSharperHost/v192/SolutionCaches/_TriangulationPerformance.-1511003668.00" t="ExcludeRecursive" />
+    <e p="$PROJECT_DIR$/../Triangulation/Runtime/iShape/Triangulation/Shape" t="Include">
+      <e p="Delaunay" t="Include">
+        <e p="Delaunator.cs" t="Include" />
+        <e p="DelaunayTriangulationExt.cs" t="Include" />
+        <e p="Side.cs" t="Include" />
+        <e p="SliceBuffer.cs" t="Include" />
+        <e p="Triangle.cs" t="Include" />
+        <e p="TriangleStack.cs" t="Include" />
+      </e>
+      <e p="LayoutExt.cs" t="Include" />
+      <e p="Link.cs" t="Include" />
+      <e p="LinkNature.cs" t="Include" />
+      <e p="MonotoneLayout.cs" t="Include" />
+      <e p="NavigatorExt.cs" t="Include" />
+      <e p="ShapeNavigator.cs" t="Include" />
+      <e p="Slice.cs" t="Include" />
+      <e p="TriangulationExt.cs" t="Include" />
+    </e>
+    <e p="$PROJECT_DIR$/../Triangulation/Runtime/iShape/Triangulation/Util" t="Include">
+      <e p="IntTriangle.cs" t="Include" />
+    </e>
     <e p="$PROJECT_DIR$" t="IncludeRecursive">
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
@@ -15,12 +38,11 @@
           <e p="TriangulationJobHandler.cs" t="Include" />
         </e>
       </e>
+      <e p="iShape.Triangulation.Runtime.csproj" t="IncludeRecursive" />
       <e p="obj" t="ExcludeRecursive" />
       <e p="packages" t="ExcludeRecursive" />
       <e p="Temp/bin" t="ExcludeRecursive" />
       <e p="TriangulationPerformance.sln" t="IncludeFlat" />
     </e>
-    <e p="$USER_HOME$/Library/Caches/Rider2019.2/extResources" t="IncludeRecursive" />
-    <e p="$USER_HOME$/Library/Caches/Rider2019.2/resharper-host/local/Transient/ReSharperHost/v192/SolutionCaches/_TriangulationPerformance.-1408998448.00" t="ExcludeRecursive" />
   </component>
 </project>

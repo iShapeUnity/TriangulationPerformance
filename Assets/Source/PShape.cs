@@ -22,7 +22,7 @@ namespace Source
             {
                 case 0:
                     state = 1;
-                    sceneText.text = "Delaunay";
+                    sceneText.text = "DDDelaunay";
                     break;
                 case 1:
                     state = 2;
@@ -45,16 +45,16 @@ namespace Source
             this.ButtonClick();
         }
 
-        private float k = 0.2f;
+        private float k = 0.0f;
         private float d = 0.005f;
 
         private void Update()
         {
-            if (k < -0.5f)
+            if (k < -0.01f)
             {
                 d = 0.005f;
             }
-            else if (k > 0.5f)
+            else if (k > 0.01f)
             {
                 d = -0.005f;
             }
