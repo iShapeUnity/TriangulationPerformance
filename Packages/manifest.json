@@ -1,8 +1,7 @@
 {
   "dependencies": {
     "com.ishape.geometry": "https://github.com/iShapeUnity/Geometry.git",
-    "com.ishape.support": "https://github.com/iShapeUnity/Support.git",
-    "com.ishape.triangulation": "file:/Users/nailsharipov/Projects/Unity/iShape/Triangulation",
+    "com.ishape.triangulation": "file:./../../../Triangulation",
     "com.unity.burst": "1.1.2",
     "com.unity.collab-proxy": "1.2.16",
     "com.unity.ext.nunit": "1.0.0",
@@ -48,10 +47,6 @@
   "lock": {
     "com.ishape.geometry": {
       "hash": "51e1e7ba2e50a8af241b4424c5b014b1ac1e92ac",
-      "revision": "HEAD"
-    },
-    "com.ishape.support": {
-      "hash": "039ead22f1657014b1d3b86b04bc74929415261c",
       "revision": "HEAD"
     }
   }
