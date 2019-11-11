@@ -1,25 +1,23 @@
 ﻿using System.Linq;
+using iShape.Mesh.Util;
 using UnityEngine;
 using UnityEngine.UI;
 using Unity.Collections;
 
-namespace Source
-{
-    public class PShape : MonoBehaviour
-    {
+namespace Source {
+
+    public class PShape : MonoBehaviour {
 
         private MeshFilter meshFilter;
         private Mesh mesh;
         public Text sceneText;
-
         public TriangulationJobHandler triangulationJobHandler;
 
         private int state = 0;
-        
-        public void ButtonClick()
-        {
-            switch (state)
-            {
+        public NativeArray<Vector2> points; 
+
+        public void ButtonClick() {
+            switch (state) {
                 case 0:
                     state = 1;
                     sceneText.text = "Delaunay";
@@ -47,35 +45,27 @@ namespace Source
         private float k = 0.0f;
         private float d = 0.005f;
 
-        private void Update()
-        {
-            if (k < -0.5f)
-            {
+        private void Update() {
+            if (k < -0.5f) {
                 d = 0.005f;
-            }
-            else if (k > 0.5f)
-            {
+            } else if (k > 0.5f) {
                 d = -0.005f;
             }
 
             k += d;
-            this.UpdateMesh(128, 4f);
+            this.UpdateShape(128, 4f);
 //            this.UpdateMesh(64, 8f);
         }
 
-        private void LateUpdate()
-        {
-            if (triangulationJobHandler != null)
-            {
+        private void LateUpdate() {
+            if (triangulationJobHandler != null) {
                 var triangles = triangulationJobHandler.Complete();
-                this.mesh.triangles = triangles;
+                this.UpdateMesh(triangles);
                 triangulationJobHandler = null;
             }
         }
 
-        private void UpdateMesh(int n, float radius)
-        {
-
+        private void UpdateShape(int n, float radius) {
             float da0 = 2f * Mathf.PI / n;
             float da1 = 16f * Mathf.PI / n;
             float delta = k * radius;
@@ -85,32 +75,23 @@ namespace Source
             float a0 = 0f;
             float a1 = 0f;
 
-            var vertices = new Vector3[2 * n];
-
-            for (int i = 0; i < n; ++i)
-            {
+            for (int i = 0; i < n; ++i) {
                 float r = radius + delta * Mathf.Sin(a1);
                 float x = r * Mathf.Cos(a0);
                 float y = r * Mathf.Sin(a0);
                 a0 -= da0;
                 a1 -= da1;
                 hull[i] = new Vector2(x, y);
-
-                vertices[i] = new Vector3(x, y);
             }
 
             var hole = new NativeArray<Vector2>(n, Allocator.Temp);
 
-            for (int i = 0; i < n; ++i)
-            {
+            for (int i = 0; i < n; ++i) {
                 var v = 0.5f * hull[n - i - 1];
                 hole[i] = v;
-                vertices[n + i] = v;
             }
 
-            this.mesh.vertices = vertices;
-            switch (state)
-            {
+            switch (state) {
                 case 0:
                     triangulationJobHandler = new TriangulationJobHandler();
                     triangulationJobHandler.Invoke(hull, hole, false);
@@ -120,31 +101,32 @@ namespace Source
                     triangulationJobHandler.Invoke(hull, hole, true);
                     break;
                 default:
-                    this.mesh.triangles = UpdateC(hull, hole);
+                    UpdateC(hull, hole);
                     break;
             }
+
+            points = new NativeArray<Vector2>(n << 1, Allocator.Persistent);
+            points.Slice(0, n).CopyFrom(hull.Slice(0, n));
+            points.Slice(n, n).CopyFrom(hull.Slice(0, n));
 
             hull.Dispose();
             hole.Dispose();
         }
 
-        private int[] UpdateC(NativeArray<Vector2> hull, NativeArray<Vector2> hole)
-        {
+        private void UpdateC(NativeArray<Vector2> hull, NativeArray<Vector2> hole) {
             int n = hull.Length;
             int m = hole.Length;
 
             var vertices = new float[2 * (n + m)];
 
             int j = 0;
-            for (int i = 0; i < n; ++i)
-            {
+            for (int i = 0; i < n; ++i) {
                 var p = hull[i];
                 vertices[j++] = p.x;
                 vertices[j++] = p.y;
             }
 
-            for (int i = 0; i < m; ++i)
-            {
+            for (int i = 0; i < m; ++i) {
                 var p = hole[i];
                 vertices[j++] = p.x;
                 vertices[j++] = p.y;
@@ -155,8 +137,20 @@ namespace Source
 
             var indices = EarcutLibrary.Earcut(data, holeIndices, 2);
 
-            return indices.ToArray();
+            this.UpdateMesh(indices.ToArray());
         }
 
+        private void UpdateMesh(int[] triangles) {
+            var indices = new NativeArray<int>(triangles, Allocator.Temp);
+            var nMesh = NetBuilder.Build(points, indices, 0.1f, Allocator.Temp);
+            indices.Dispose();
+            this.mesh.vertices = nMesh.vertices.ToArray();
+            this.mesh.triangles = nMesh.triangles.ToArray();
+            nMesh.Dispose();
+            points.Dispose();
+        }
+
+
     }
+
 }
