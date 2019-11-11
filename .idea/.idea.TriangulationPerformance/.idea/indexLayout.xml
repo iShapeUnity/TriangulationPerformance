@@ -3,13 +3,14 @@
   <component name="ContentModelUserStore">
     <attachedFolders />
     <explicitIncludes>
+      <Path>../Mesh</Path>
       <Path>../Triangulation</Path>
-      <Path>Library/PackageCache/com.ishape.geometry@51e1e7ba2e50a8af241b4424c5b014b1ac1e92ac</Path>
-      <Path>Library/PackageCache/com.ishape.support@039ead22f1657014b1d3b86b04bc74929415261c</Path>
+      <Path>Library/PackageCache/com.ishape.geometry@a0c78ab2bac974877ab270a9d866621eddcd04af</Path>
       <Path>Library/PackageCache/com.unity.burst@1.1.2</Path>
       <Path>Library/PackageCache/com.unity.collab-proxy@1.2.16</Path>
+      <Path>Library/PackageCache/com.unity.collections@0.1.1-preview</Path>
       <Path>Library/PackageCache/com.unity.ext.nunit@1.0.0</Path>
-      <Path>Library/PackageCache/com.unity.ide.rider@1.1.0</Path>
+      <Path>Library/PackageCache/com.unity.ide.rider@1.1.2-preview.2</Path>
       <Path>Library/PackageCache/com.unity.ide.vscode@1.1.2</Path>
       <Path>Library/PackageCache/com.unity.mathematics@1.1.0</Path>
       <Path>Library/PackageCache/com.unity.test-framework@1.0.13</Path>
@@ -22,6 +23,7 @@
       <Path>.idea</Path>
       <Path>Library</Path>
       <Path>Logs</Path>
+      <Path>Temp</Path>
       <Path>ipa</Path>
       <Path>obj</Path>
     </explicitExcludes>

@@ -22,7 +22,7 @@ namespace Source
             {
                 case 0:
                     state = 1;
-                    sceneText.text = "DDDelaunay";
+                    sceneText.text = "Delaunay";
                     break;
                 case 1:
                     state = 2;
@@ -35,8 +35,7 @@ namespace Source
             }
         }
 
-        private void Awake()
-        {
+        private void Awake() {
             Application.targetFrameRate = 60;
             this.meshFilter = gameObject.GetComponent<MeshFilter>();
             this.mesh = new Mesh();
@@ -50,17 +49,17 @@ namespace Source
 
         private void Update()
         {
-            if (k < -0.01f)
+            if (k < -0.5f)
             {
                 d = 0.005f;
             }
-            else if (k > 0.01f)
+            else if (k > 0.5f)
             {
                 d = -0.005f;
             }
 
             k += d;
-            this.UpdateMesh(4096, 4f);
+            this.UpdateMesh(128, 4f);
 //            this.UpdateMesh(64, 8f);
         }
 
