@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="$USER_HOME$/Library/Caches/Rider2019.2/extResources" t="IncludeRecursive" />
-    <e p="$USER_HOME$/Library/Caches/Rider2019.2/resharper-host/local/Transient/ReSharperHost/v192/SolutionCaches/_TriangulationPerformance.-1511003668.00" t="ExcludeRecursive" />
     <e p="$PROJECT_DIR$/../Mesh/Runtime/iShape/Mesh/Util" t="Include">
       <e p="NativePlainMesh.cs" t="Include" />
       <e p="NetBuilder.cs" t="Include" />
@@ -50,5 +48,7 @@
       <e p="Temp/bin" t="ExcludeRecursive" />
       <e p="TriangulationPerformance.sln" t="IncludeFlat" />
     </e>
+    <e p="$USER_HOME$/Library/Caches/Rider2019.2/extResources" t="IncludeRecursive" />
+    <e p="$USER_HOME$/Library/Caches/Rider2019.2/resharper-host/local/Transient/ReSharperHost/v192/SolutionCaches/_TriangulationPerformance.-1408998448.00" t="ExcludeRecursive" />
   </component>
 </project>
