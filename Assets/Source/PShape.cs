@@ -52,7 +52,10 @@ namespace Source {
             }
 
             k += d;
+
             this.UpdateShape(16, 4f);
+
+            // this.UpdateShape(128, 4f);
 //            this.UpdateMesh(64, 8f);
         }
 
@@ -65,7 +68,7 @@ namespace Source {
         }
 
         private void UpdateShape(int n, float radius) {
-            float da0 = 2f * Mathf.PI / n;
+            float da0 = 2f * Mathf.PI / n; 
             float da1 = 16f * Mathf.PI / n;
             float delta = k * radius;
 
@@ -75,11 +78,12 @@ namespace Source {
             float a1 = 0f;
 
             for (int i = 0; i < n; ++i) {
-                float r = radius + delta * Mathf.Sin(a1);
+                // float r = radius + delta * Mathf.Sin(a1);
+                float r = radius + delta;
                 float x = r * Mathf.Cos(a0);
                 float y = r * Mathf.Sin(a0);
                 a0 -= da0;
-                a1 -= da1;
+                // a1 -= da1;
                 hull[i] = new Vector2(x, y);
             }
 
@@ -143,6 +147,7 @@ namespace Source {
             indices.Dispose();
             this.mesh.vertices = nMesh.vertices.ToArray();
             this.mesh.triangles = nMesh.triangles.ToArray();
+
             nMesh.Dispose();
         }
 
