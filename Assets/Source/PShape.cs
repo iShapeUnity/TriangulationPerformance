@@ -14,7 +14,6 @@ namespace Source {
         public TriangulationJobHandler triangulationJobHandler;
 
         private int state = 0;
-        public NativeArray<Vector2> points; 
 
         public void ButtonClick() {
             switch (state) {
@@ -53,14 +52,14 @@ namespace Source {
             }
 
             k += d;
-            this.UpdateShape(128, 4f);
+            this.UpdateShape(16, 4f);
 //            this.UpdateMesh(64, 8f);
         }
 
         private void LateUpdate() {
             if (triangulationJobHandler != null) {
-                var triangles = triangulationJobHandler.Complete();
-                this.UpdateMesh(triangles);
+                var result = triangulationJobHandler.Complete();
+                this.UpdateMesh(result.points, result.triangles);
                 triangulationJobHandler = null;
             }
         }
@@ -105,10 +104,6 @@ namespace Source {
                     break;
             }
 
-            points = new NativeArray<Vector2>(n << 1, Allocator.Persistent);
-            points.Slice(0, n).CopyFrom(hull.Slice(0, n));
-            points.Slice(n, n).CopyFrom(hull.Slice(0, n));
-
             hull.Dispose();
             hole.Dispose();
         }
@@ -137,17 +132,18 @@ namespace Source {
 
             var indices = EarcutLibrary.Earcut(data, holeIndices, 2);
 
-            this.UpdateMesh(indices.ToArray());
+//            this.UpdateMesh(indices.ToArray());
         }
 
-        private void UpdateMesh(int[] triangles) {
+        private void UpdateMesh(Vector2[] points, int[] triangles) {
             var indices = new NativeArray<int>(triangles, Allocator.Temp);
-            var nMesh = NetBuilder.Build(points, indices, 0.1f, Allocator.Temp);
+            var nPoints = new NativeArray<Vector2>(points, Allocator.Temp);
+            var nMesh = NetBuilder.Build(nPoints, indices, 0.1f, Allocator.Temp);
+            nPoints.Dispose();
             indices.Dispose();
             this.mesh.vertices = nMesh.vertices.ToArray();
             this.mesh.triangles = nMesh.triangles.ToArray();
             nMesh.Dispose();
-            points.Dispose();
         }
 
 

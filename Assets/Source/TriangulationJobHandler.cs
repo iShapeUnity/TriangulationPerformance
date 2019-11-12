@@ -7,6 +7,11 @@ namespace Source {
 
     public class TriangulationJobHandler {
 
+        public struct Result {
+            internal int[] triangles;
+            internal Vector2[] points;
+        }
+
         private TriangulationJob job;
         private JobHandle jobHandle;
         
@@ -34,18 +39,25 @@ namespace Source {
             this.jobHandle = this.job.Schedule();
         }
 
-        public int[] Complete() {
+        public Result Complete() {
             this.jobHandle.Complete();
             
             int n = this.job.length[0];
             var triangles = new NativeArray<int>(n, Allocator.Temp);
             triangles.Slice(0, n).CopyFrom(job.triangles.Slice(0, n));
+
+            var iGeom = IntGeom.DefGeom;
+            var points = IntGeom.DefGeom.Float(job.plainShape.points.ToArray());
+            
             this.job.Dispose();
             
             var array = triangles.ToArray();
             triangles.Dispose();
 
-            return array;
+            return new Result() {
+                triangles = array,
+                points = points,
+            };
         }
 
     }
