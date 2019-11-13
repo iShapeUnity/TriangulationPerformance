@@ -23,20 +23,20 @@ namespace Source {
         internal NativeArray<int> length;
 
         public void Execute() {
-            NativeArray<int> triangles;
+            NativeArray<int> result;
 
             if (isDelaunay) {
-                triangles = plainShape.DelaunayTriangulate(Allocator.Temp);    
+                result = plainShape.DelaunayTriangulate(Allocator.Temp);    
             } else {
-                triangles = plainShape.Triangulate(Allocator.Temp);
+                result = plainShape.Triangulate(Allocator.Temp);
             }
 
-            int n = triangles.Length;
+            int n = result.Length;
             length[0] = n;
 
-            this.triangles.Slice(0, n).CopyFrom(triangles.Slice(0, n));
+            this.triangles.Slice(0, n).CopyFrom(result.Slice(0, n));
             
-            triangles.Dispose();
+            result.Dispose();
         }
 
         public void Dispose() {

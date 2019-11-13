@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using iShape.Mesh.Util;
+﻿using iShape.Mesh.Util;
 using UnityEngine;
 using UnityEngine.UI;
 using Unity.Collections;
@@ -20,10 +19,6 @@ namespace Source {
                 case 0:
                     state = 1;
                     sceneText.text = "Delaunay";
-                    break;
-                case 1:
-                    state = 2;
-                    sceneText.text = "Earcut";
                     break;
                 default:
                     state = 0;
@@ -52,17 +47,14 @@ namespace Source {
             }
 
             k += d;
-
-            this.UpdateShape(16, 4f);
-
-            // this.UpdateShape(128, 4f);
-//            this.UpdateMesh(64, 8f);
+            this.UpdateShape(128, 4f);
         }
 
         private void LateUpdate() {
             if (triangulationJobHandler != null) {
-                var result = triangulationJobHandler.Complete();
-                this.UpdateMesh(result.points, result.triangles);
+                var shape = triangulationJobHandler.Complete(Allocator.Temp);
+                this.UpdateMesh(shape);
+                shape.Dispose();
                 triangulationJobHandler = null;
             }
         }
@@ -78,12 +70,11 @@ namespace Source {
             float a1 = 0f;
 
             for (int i = 0; i < n; ++i) {
-                // float r = radius + delta * Mathf.Sin(a1);
-                float r = radius + delta;
+                float r = radius + delta * Mathf.Sin(a1);
                 float x = r * Mathf.Cos(a0);
                 float y = r * Mathf.Sin(a0);
                 a0 -= da0;
-                // a1 -= da1;
+                a1 -= da1;
                 hull[i] = new Vector2(x, y);
             }
 
@@ -99,12 +90,9 @@ namespace Source {
                     triangulationJobHandler = new TriangulationJobHandler();
                     triangulationJobHandler.Invoke(hull, hole, false);
                     break;
-                case 1:
+                default:
                     triangulationJobHandler = new TriangulationJobHandler();
                     triangulationJobHandler.Invoke(hull, hole, true);
-                    break;
-                default:
-                    UpdateC(hull, hole);
                     break;
             }
 
@@ -112,39 +100,28 @@ namespace Source {
             hole.Dispose();
         }
 
-        private void UpdateC(NativeArray<Vector2> hull, NativeArray<Vector2> hole) {
-            int n = hull.Length;
-            int m = hole.Length;
 
-            var vertices = new float[2 * (n + m)];
+        private void UpdateMesh(NetBuilder.Shape shape) {
+            var nMesh = NetBuilder.Build(shape, 0.01f, Allocator.Temp);
+            
+            for (int i = 0;
+                i < shape.paths.Length; ++i) {
+                var path = shape.paths[i];
+                int length = path.end - path.begin;
+                var points = new NativeArray<Vector2>(length, Allocator.Temp);
+                points.Slice(0, length).CopyFrom(shape.points.Slice(0, length));
+                var pMesh = PathBuilder.BuildClosedPath(points, 0.05f, Allocator.Temp);
+                
+                points.Dispose();
+                
+                var temp = new NativePlainMesh(nMesh, pMesh, Allocator.Temp);
+                
+                pMesh.Dispose();
+                nMesh.Dispose();
 
-            int j = 0;
-            for (int i = 0; i < n; ++i) {
-                var p = hull[i];
-                vertices[j++] = p.x;
-                vertices[j++] = p.y;
+                nMesh = temp;
             }
-
-            for (int i = 0; i < m; ++i) {
-                var p = hole[i];
-                vertices[j++] = p.x;
-                vertices[j++] = p.y;
-            }
-
-            var data = vertices.ToList();
-            var holeIndices = new[] {n}.ToList();
-
-            var indices = EarcutLibrary.Earcut(data, holeIndices, 2);
-
-//            this.UpdateMesh(indices.ToArray());
-        }
-
-        private void UpdateMesh(Vector2[] points, int[] triangles) {
-            var indices = new NativeArray<int>(triangles, Allocator.Temp);
-            var nPoints = new NativeArray<Vector2>(points, Allocator.Temp);
-            var nMesh = NetBuilder.Build(nPoints, indices, 0.1f, Allocator.Temp);
-            nPoints.Dispose();
-            indices.Dispose();
+            
             this.mesh.vertices = nMesh.vertices.ToArray();
             this.mesh.triangles = nMesh.triangles.ToArray();
 

@@ -1,4 +1,5 @@
 using iShape.Geometry;
+using iShape.Mesh.Util;
 using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
@@ -7,11 +8,6 @@ namespace Source {
 
     public class TriangulationJobHandler {
 
-        public struct Result {
-            internal int[] triangles;
-            internal Vector2[] points;
-        }
-
         private TriangulationJob job;
         private JobHandle jobHandle;
         
@@ -19,7 +15,7 @@ namespace Source {
             var iGeom = IntGeom.DefGeom;
 
             var iHull = iGeom.Int(hull.ToArray());
-            var iHoles = new IntVector[1][] { iGeom.Int(hole.ToArray()) };
+            var iHoles = new[] { iGeom.Int(hole.ToArray()) };
 
             var iShape = new IntShape(iHull, iHoles);
             var pShape = new PlainShape(iShape, Allocator.TempJob);
@@ -39,25 +35,27 @@ namespace Source {
             this.jobHandle = this.job.Schedule();
         }
 
-        public Result Complete() {
+        public NetBuilder.Shape Complete(Allocator allocator) {
             this.jobHandle.Complete();
             
             int n = this.job.length[0];
-            var triangles = new NativeArray<int>(n, Allocator.Temp);
+            var triangles = new NativeArray<int>(n, allocator);
             triangles.Slice(0, n).CopyFrom(job.triangles.Slice(0, n));
-
-            var iGeom = IntGeom.DefGeom;
-            var points = IntGeom.DefGeom.Float(job.plainShape.points.ToArray());
             
+            var plainShape = job.plainShape;
+            
+            var points = IntGeom.DefGeom.Float(plainShape.points, allocator);
+            
+            n = plainShape.layouts.Length;
+            var paths = new NativeArray<NetBuilder.Path>(n, allocator);
+            for (int i = 0; i < n; ++i) {
+                var layout = plainShape.layouts[i];
+                paths[i] = new NetBuilder.Path(layout.begin, layout.end);
+            }
+
             this.job.Dispose();
-            
-            var array = triangles.ToArray();
-            triangles.Dispose();
 
-            return new Result() {
-                triangles = array,
-                points = points,
-            };
+            return new NetBuilder.Shape(triangles, points, paths);
         }
 
     }
