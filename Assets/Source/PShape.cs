@@ -47,7 +47,7 @@ namespace Source {
             }
 
             k += d;
-            this.UpdateShape(128, 4f);
+            this.UpdateShape(512, 4f);
         }
 
         private void LateUpdate() {
@@ -104,13 +104,13 @@ namespace Source {
         private void UpdateMesh(NetBuilder.Shape shape) {
             var nMesh = NetBuilder.Build(shape, 0.01f, Allocator.Temp);
             
-            for (int i = 0;
-                i < shape.paths.Length; ++i) {
+            for (int i = 0; i < shape.paths.Length; ++i) {
                 var path = shape.paths[i];
-                int length = path.end - path.begin;
+                int length = path.end - path.begin + 1;
                 var points = new NativeArray<Vector2>(length, Allocator.Temp);
-                points.Slice(0, length).CopyFrom(shape.points.Slice(0, length));
-                var pMesh = PathBuilder.BuildClosedPath(points, 0.05f, Allocator.Temp);
+                points.Slice(0, length).CopyFrom(shape.points.Slice(path.begin, length));
+                
+                var pMesh = PathBuilder.BuildClosedPath(points, 0.03f, path.isClockWise, Allocator.Temp);
                 
                 points.Dispose();
                 
@@ -122,6 +122,8 @@ namespace Source {
                 nMesh = temp;
             }
             
+            
+            this.mesh.Clear();
             this.mesh.vertices = nMesh.vertices.ToArray();
             this.mesh.triangles = nMesh.triangles.ToArray();
 

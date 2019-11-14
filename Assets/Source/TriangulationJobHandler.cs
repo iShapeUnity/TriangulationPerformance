@@ -50,7 +50,7 @@ namespace Source {
             var paths = new NativeArray<NetBuilder.Path>(n, allocator);
             for (int i = 0; i < n; ++i) {
                 var layout = plainShape.layouts[i];
-                paths[i] = new NetBuilder.Path(layout.begin, layout.end);
+                paths[i] = new NetBuilder.Path(layout.begin, layout.end, !layout.isHole);
             }
 
             this.job.Dispose();
