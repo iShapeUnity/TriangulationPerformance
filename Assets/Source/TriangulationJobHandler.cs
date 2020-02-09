@@ -1,5 +1,6 @@
 using iShape.Geometry;
-using iShape.Mesh.Util;
+using iShape.Geometry.Container;
+using iShape.MeshUtil;
 using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
@@ -50,7 +51,7 @@ namespace Source {
             var paths = new NativeArray<NetBuilder.Path>(n, allocator);
             for (int i = 0; i < n; ++i) {
                 var layout = plainShape.layouts[i];
-                paths[i] = new NetBuilder.Path(layout.begin, layout.end, !layout.isHole);
+                paths[i] = new NetBuilder.Path(layout.begin, layout.end, layout.isClockWise);
             }
 
             this.job.Dispose();

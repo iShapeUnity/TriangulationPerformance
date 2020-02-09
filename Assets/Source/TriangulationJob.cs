@@ -1,6 +1,6 @@
-using iShape.Geometry;
-using iShape.Triangulation.Shape;
-using iShape.Triangulation.Shape.Delaunay;
+using iShape.Extension.Shape;
+using iShape.Extension.Shape.Delaunay;
+using iShape.Geometry.Container;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;

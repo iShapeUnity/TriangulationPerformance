@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="RIDER_MODULE" version="4">
   <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$/../../../Geometry" />
     <content url="file://$MODULE_DIR$/../../../Mesh" />
+    <content url="file://$MODULE_DIR$/../../../MeshUtil" />
     <content url="file://$MODULE_DIR$/../../../Triangulation" />
     <content url="file://$MODULE_DIR$/../.." />
     <orderEntry type="sourceFolder" forTests="false" />

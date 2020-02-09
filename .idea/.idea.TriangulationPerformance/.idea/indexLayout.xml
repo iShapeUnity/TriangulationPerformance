@@ -3,12 +3,11 @@
   <component name="ContentModelUserStore">
     <attachedFolders>
       <Path>../Mesh</Path>
-      <Path>../Triangulation</Path>
     </attachedFolders>
     <explicitIncludes>
+      <Path>../Geometry</Path>
+      <Path>../MeshUtil</Path>
       <Path>../Triangulation</Path>
-      <Path>Assets</Path>
-      <Path>Library/PackageCache/com.ishape.geometry@61368fb4935623b05e1da594038b38fa398bace1</Path>
       <Path>Library/PackageCache/com.unity.burst@1.1.2</Path>
       <Path>Library/PackageCache/com.unity.collab-proxy@1.2.16</Path>
       <Path>Library/PackageCache/com.unity.collections@0.1.1-preview</Path>
